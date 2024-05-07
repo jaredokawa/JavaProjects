@@ -1,2 +1,2 @@
-public class ChapterEight {
+public class Ch8 {
 }

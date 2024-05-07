@@ -36,7 +36,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class Main
+public class Ch5
 {
     public static void main(String[] args)
     {

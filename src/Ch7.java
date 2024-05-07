@@ -26,7 +26,7 @@
 
 import java.util.Scanner;
 
-public class Main
+public class Ch7
 {
     public static void main(String[] args)
     {
