@@ -26,10 +26,8 @@
 
 import java.util.Scanner;
 
-public class Ch7
-{
-    public static void main(String[] args)
-    {
+public class Ch7 {
+    public static void main(String[] args) {
         //Create an array to store 5 test scores from user and
         int[] testScores = new int[5];
         // Method expects an array of integers as input, so we pass the testScores array to it.
@@ -43,43 +41,37 @@ public class Ch7
         determineGrade(testScores, letterGrades);
         //Display the letter grade of each score as well as the overall average
         displayTestScores(testScores, letterGrades);
+
     }
 
     //Method that returns a boolean value to indicate if the user input is within range
-    public static boolean validateUserInput(int input)
-    {
+    public static boolean validateUserInput(int input) {
         return input >= 0 && input <= 100;
     }
 
     //Method to add test scores to an array
-    public static void addTestScoresToArray(int[] scoresArray)
-    {
+    public static void addTestScoresToArray(int[] scoresArray) {
         Scanner scan = new Scanner(System.in);
 
         //Loop to iterate over the scores array to
-        for (int i = 0; i < scoresArray.length; i++)
-        {
+        for (int i = 0; i < scoresArray.length; i++) {
             boolean validInput = false;
             int score;
 
             //Loop to ask user for test scores until it reaches the scores array length of 5
-            while (!validInput)
-            {
+            while (!validInput) {
                 System.out.println("Enter a test score " + (i + 1) + " (0-100):");
 
                 //Check if the next input is an integer
-                if (scan.hasNextInt())
-                {
+                if (scan.hasNextInt()) {
                     //Stores user input into score variable
                     score = scan.nextInt();
 
                     //Checks user input stored in score variable with method
-                    if (validateUserInput(score))
-                    {
+                    if (validateUserInput(score)) {
                         scoresArray[i] = score; //If user input is validated, add to scores array
                         validInput = true; //Sets flag to true to exit loop
-                    } else
-                    {
+                    } else {
                         System.out.println("Invalid score. Please enter a number between 0 and 100.");
                         scan.next(); //Consume invalid token
                     }
@@ -88,8 +80,7 @@ public class Ch7
         }
     }
 
-    public static void bubbleSort(int[] array)
-    {
+    public static void bubbleSort(int[] array) {
         int n = array.length; //Stores the length of the input array, which represents the # of elements in the array
         boolean swapped; //Flag to track whether elements were swapped during a pass through the array
 
@@ -97,10 +88,9 @@ public class Ch7
         do {
             swapped = false;
             //Iterates through the array
-            for (int i = 1; i < n ; i++)
-            {
+            for (int i = 1; i < n; i++) {
                 //Compares adjacent elements and swaps if necessary
-                if (array[i -1] > array[i]) //Checks if the current element is greater than the next element in the array
+                if (array[i - 1] > array[i]) //Checks if the current element is greater than the next element in the array
                 {
                     //Stores the value of the current element in temp. Prevents data loss when swapped
                     int temp = array[i - 1];
@@ -115,44 +105,38 @@ public class Ch7
     }
 
     //Determines the letter grades for test scores
-    public static void determineGrade(int[] scores, char[] grades)
-    {
-        for (int i = 0; i < scores.length; i++)
-        {
+    public static void determineGrade(int[] scores, char[] grades) {
+        for (int i = 0; i < scores.length; i++) {
             int score = scores[i];
 
-            if (score >= 90)
-            {
+            if (score >= 90) {
                 grades[i] = 'A';
-            } else if (score >= 80)
-            {
+            } else if (score >= 80) {
                 grades[i] = 'B';
-            } else if (score >= 70)
-            {
+            } else if (score >= 70) {
                 grades[i] = 'C';
-            } else if (score >= 60)
-            {
+            } else if (score >= 60) {
                 grades[i] = 'D';
-            } else
-            {
+            } else {
                 grades[i] = 'F';
             }
         }
     }
 
     //Displays test scores and their corresponding letter grades
-    public static void displayTestScores(int[] scores, char[] grades)
-    {
-        int totalScore = 0;
+    public static void displayTestScores(int[] scores, char[] grades) {
+        double totalScore = 0;
+        int score = 0;
+        char grade = ' ';
+        double average = 0;
 
-        for (int i = 0; i < scores.length; i++)
-        {
-            int score = scores[i];
-            char grade = grades[i];
+        for (int i = 0; i < scores.length; i++) {
+            score = scores[i];
+            grade = grades[i];
             totalScore += score;
             System.out.println("Test Score: " + score + ", Grade: " + grade);
         }
-        double average = totalScore / (double) scores.length;
+         average = totalScore / scores.length;
         System.out.println("Overall Average: " + average);
     }
 }
