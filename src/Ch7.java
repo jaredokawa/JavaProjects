@@ -29,7 +29,10 @@ import java.util.Scanner;
 public class Ch7 {
     public static void main(String[] args) {
         //Create an array to store 5 test scores from user and
+        int age = 5;
+        Integer age2 = 5;
         int[] testScores = new int[5];
+        char[] letterGrades = new char[testScores.length];
         // Method expects an array of integers as input, so we pass the testScores array to it.
         // This allows the method to work with the testScores array inside its own scope,
         // performing tasks such as reading user input and storing it in the array.
@@ -37,7 +40,6 @@ public class Ch7 {
         //Sorts the test scores using bubble sort
         bubbleSort(testScores);
         //Calculate the letter grade for each test score
-        char[] letterGrades = new char[testScores.length];
         determineGrade(testScores, letterGrades);
         //Display the letter grade of each score as well as the overall average
         displayTestScores(testScores, letterGrades);
