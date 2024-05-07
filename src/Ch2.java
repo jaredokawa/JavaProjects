@@ -1,11 +1,11 @@
 import java.util.Scanner;
 
 public class Ch2 {
+
     public static void main(String[] args) {
-
         Scanner scan = new Scanner(System.in);
-
         int a, b, c, d, e;
+        int avg = 0;
 
         System.out.println("Please enter the first whole number.");
         a = readWholeNumber(scan);
@@ -20,11 +20,10 @@ public class Ch2 {
         System.out.println("Please enter the fourth whole number.");
         d = readWholeNumber(scan);
 
-
         System.out.println("Please enter the fifth whole number.");
         e = readWholeNumber(scan);
 
-        int avg = (a + b + c + d + e) / 5;
+        avg = (a + b + c + d + e) / 5;
 
         System.out.println("The average of those numbers is " + avg);
     }

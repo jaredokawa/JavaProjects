@@ -36,40 +36,42 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class Ch5
-{
-    public static void main(String[] args)
-    {
+public class Ch5 {
+    public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
         boolean continueInput = true;
+        boolean validInput = false;
+        int decimalEquivalent = 0;
+        String binaryNumber = "";
+        int length = 0;
+        char binaryDigit;
+        int position = 0;
+        int decimalValue = 0;
 
-        do
-        {
-            boolean validInput = false;
-            int decimalEquivalent = 0;
+        do {
+            validInput = false;
+            decimalEquivalent = 0;
 
-            while (!validInput)
-            {
+            while (!validInput) {
                 System.out.println("Enter a binary number, example: 1011011");
-                String inputCheck = scan.nextLine();
+                binaryNumber = scan.nextLine();
 
-                if (inputCheck.matches("[01]+")) {
+                if (binaryNumber.matches("[01]+")) {
                     validInput = true;
 
                     //Get the binary number entered by user
-                    String binaryNumber = inputCheck;
                     //Get length of the binary number
-                    int length = binaryNumber.length();
+                    length = binaryNumber.length();
 
                     //Iterate through the binary digits
                     for (int i = length - 1; i >= 0; i--) {
                         //Get binary digit at position i
-                        char binaryDigit = binaryNumber.charAt(i);
+                        binaryDigit = binaryNumber.charAt(i);
 
                         //Calculate the decimal value of the current digit based on its position
-                        int position = length - i - 1; //Position starts from zero at the far right
+                        position = length - i - 1; //Position starts from zero at the far right
                         //If binaryDigit == 1 calculate digit by position; Else assign 0 as the decimal value
-                        int decimalValue = (int) ((binaryDigit == '1') ? (int) Math.pow(2, position) : 0);
+                        decimalValue = (int) ((binaryDigit == '1') ? (int) Math.pow(2, position) : 0);
 
                         //Add the decimal value of the current digit to decimal equivalent
                         decimalEquivalent += decimalValue;
@@ -80,8 +82,7 @@ public class Ch5
                     //Print the base 10 equivalent
                     System.out.println("Its base 10 equivalent is " + decimalEquivalent);
 
-                } else
-                {
+                } else {
                     //Prints message if user input is not valid
                     System.out.println("The number you entered is not valid. Please enter a binary number.");
                 }

@@ -24,31 +24,33 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
-public class Ch6
-{
-    public static void main(String[] args)
-    {
+public class Ch6 {
+    public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
         boolean continueInput = true;
+        boolean validInput = false;
+        int validatedInt = 0;
+        int evenDigitsCount = 0;
+        int oddDigitsCount = 0;
+        String inputCheck = "";
+        StringBuilder evenDigits = new StringBuilder();
+        StringBuilder oddDigits = new StringBuilder();
+        StringBuilder reversedWithSpaces = new StringBuilder();
+        String numberString = "";
+        char digit = ' ';
 
-        do
-        {
-            boolean validInput = false;
-            int validatedInt = 0;
-            int evenDigitsCount = 0;
-            int oddDigitsCount = 0;
-            StringBuilder evenDigits = new StringBuilder();
-            StringBuilder oddDigits = new StringBuilder();
-            StringBuilder reversedWithSpaces = new StringBuilder();
+        do {
+            validInput = false;
+            validatedInt = 0;
+            evenDigitsCount = 0;
+            oddDigitsCount = 0;
 
-            while (!validInput)
-            {
+            while (!validInput) {
                 System.out.println("Enter a positive integer greater than 0.");
-                String inputCheck = scan.nextLine();
+                inputCheck = scan.nextLine();
 
                 //Validates that the entry is a positive integer
-                if (inputCheck.matches("[0-9]+"))
-                {
+                if (inputCheck.matches("[0-9]+")) {
                     validInput = true;
 
                     //Parse the integer and store it in the validatedInt variable
@@ -58,44 +60,43 @@ public class Ch6
                     System.out.println("the original number " + validatedInt);
 
                     //Convert the Integer to a String
-                    String numberString = Integer.toString(validatedInt);
-
+                    numberString = Integer.toString(validatedInt);
                     //Clear the StringBuilder before adding new content
                     reversedWithSpaces.setLength(0);
 
                     //Iterate through numbers to reverse and add spaces
-                    for (int i = numberString.length() - 1; i >= 0; i--)
-                    {
-                        char digit = numberString.charAt(i);
+                    for (int i = numberString.length() - 1; i >= 0; i--) {
+                        digit = numberString.charAt(i);
                         reversedWithSpaces.append(digit).append(" ");
                     }
                     //Print the reversed string with spaces
                     System.out.println("the number reversed " + reversedWithSpaces);
 
-                } else
-                {
+                } else {
                     //Prints message if user input is not valid
                     System.out.println("The number you entered is not valid. Please enter a positive integer.");
                 }
 
                 // Iterate through digits to determine if any are even or odd
-                int temp = validatedInt; // Temp variable to avoid modifying validatedInt
-                while (temp > 0) {
-                    int digit = temp % 10;
-                    if (digit % 2 == 0) {
-                        evenDigits.append(digit);
+                int digitEvenOrOdd = 0;
+                while (validatedInt > 0) {
+                    digitEvenOrOdd = validatedInt % 10;
+                    if (digitEvenOrOdd % 2 == 0) {
+                        evenDigits.append(digitEvenOrOdd);
                         evenDigitsCount++;
                     } else {
-                        oddDigits.append(digit);
+                        oddDigits.append(digitEvenOrOdd);
                         oddDigitsCount++;
                     }
-                    temp /= 10;
+                    validatedInt /= 10;
                 }
 
                 // Output even digits
                 if (evenDigitsCount > 0) {
+                    System.out.println();
                     System.out.println("the even digits are " + evenDigits);
                 } else {
+                    System.out.println();
                     System.out.println("There are no even digits");
                 }
 
@@ -109,15 +110,13 @@ public class Ch6
 
             //Creates new file object
             File file = new File("outDataFile.txt");
-
-            try
-            {
+            try {
                 //Checks if the file represented by the file object exists
-                if (!file.exists())
-                {
+                if (!file.exists()) {
                     //If the file does not exist, it will be created with the name specified by the file object
                     file.createNewFile();
                 }
+
                 //Creates a new PrintWriter object named pw
                 PrintWriter pw = new PrintWriter(file);
                 //Writes to the text file created
