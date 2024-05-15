@@ -60,13 +60,125 @@
 //4. If you violate any of these restrictions, you will automatically get a score of ZERO!
 
 
+import java.util.Random;
 import java.util.Scanner;
 
 public class Midterm {
+    private static final Scanner scan = new Scanner(System.in);
+    private static final Random random = new Random();
+
     public static void main(String[] args) {
 
-        Scanner scan = new Scanner(System.in);
+        String playerName;
+        String playerInput = "";
+
+        System.out.println("Please enter your name.");
+        playerName = scan.nextLine();
+
+        System.out.println("1. Addition");
+        System.out.println("2. Subtraction");
+        System.out.println("3. Multiplication");
+        System.out.println("4. Division");
 
 
+        boolean validInput = false;
+
+        while(!validInput){
+            System.out.println("Please select a number.");
+            playerInput = scan.nextLine();
+
+            if(playerInput.matches("[01]+")){
+                validInput = true;
+            }
+        }
+
+        if(playerInput.equalsIgnoreCase("1")){
+            generateAddition();
+        }
+    }
+
+    private static void generateAddition() {
+        int a = random.nextInt(20) + 1;
+        int b = random.nextInt(20) + 1;
+        int expected = a + b;
+
+        System.out.println(a + " + " + b + " =");
+        String answer = scan.nextLine();
+
+        checkResult(expected, Integer.parseInt(answer));
+    }
+
+    private void generateSubtraction() {
+        int a = random.nextInt(20) + 1;
+        int b = random.nextInt(20) + 1;
+        int expected = a + b;
+
+        System.out.println(a + " - " + b + " =");
+        String answer = scan.nextLine();
+
+        checkResult(expected, Integer.parseInt(answer));
+    }
+
+    private void generateMultiplication() {
+        int a = random.nextInt(20) + 1;
+        int b = random.nextInt(20) + 1;
+        int expected = a + b;
+
+        System.out.println(a + " - " + b + " =");
+        String answer = scan.nextLine();
+
+        checkResult(expected, Integer.parseInt(answer));
+    }
+
+    private int askQuestion(final String question) {
+        System.out.print(question);
+
+        return scan.nextInt();
+    }
+
+    private static void checkResult(final int expected, final int answer) {
+        if (expected == answer) {
+            System.out.println("Correct answer!");
+        } else {
+            System.out.println("Wrong answer. Try again.");
+        }
     }
 }
+
+//public static Problem generateRandomProblem (){
+//    Random randomGen = new Random();
+//
+//    int number1 = randomGen.nextInt(201);
+//    int number2 = randomGen.nextInt(201);
+//
+//    Operation operation = Operation.values()[randomGen.nextInt(Operation.values().length)];
+//    return new Problem(number1, number2, operation);
+//}
+
+//class Problem{
+//
+//    private int number1;
+//    private int number2;
+//    private Operation operation;
+//
+//    public Problem(int number1, int number2, Operation operation) {
+//        this.number1 = number1;
+//        this.number2 = number2;
+//        this.operation = operation;
+//}
+//    public int getNumber1() {
+//        return number1;
+//    }
+//
+//    public int getNumber2() {
+//        return number2;
+//    }
+//
+//    public Operation getOperation() {
+//        return operation;
+//    }
+//}
+//
+//enum Operation {
+//    ADDITION, SUBTRACTION, MULTIPLICATION, DIVISION
+//}
