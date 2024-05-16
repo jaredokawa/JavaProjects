@@ -59,7 +59,6 @@
 //3. No labels or go-to statements
 //4. If you violate any of these restrictions, you will automatically get a score of ZERO!
 
-
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
