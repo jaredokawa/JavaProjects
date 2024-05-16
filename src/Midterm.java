@@ -70,15 +70,17 @@ public class Midterm {
     private static final Scanner scan = new Scanner(System.in);
     private static final Random random = new Random();
     private static String playerName;
+    private static String playerInput = "";
     private static double userEarnings = 0.0;
     private static int correct = 0;
     private static int incorrect = 0;
+    private static double earningsChange = 0.0;
+    private static int correctChange = 0;
+    private static int incorrectChange = 0;
 
     public static void main(String[] args) {
 
         credits();
-
-        String playerInput = "";
 
         System.out.println("Please enter your name and press <ENTER>");
         playerName = scan.nextLine();
@@ -90,7 +92,13 @@ public class Midterm {
 
             playerInput = validateUserResponse(playerInput);
 
+            updateStats(earningsChange, correctChange, incorrectChange);
+
             saveStats();
+
+            if (playerInput.equalsIgnoreCase("n")) {
+                continueInput = false;
+            }
 
         } while(continueInput);
     }
@@ -104,8 +112,6 @@ public class Midterm {
 
             if (playerInput.matches("[0-5]")) {
                 validInput = true;
-            }else if (playerInput.equalsIgnoreCase("n")) {
-                System.exit(0);
             }else {
                 System.out.println("This is not a valid menu option. Please enter a number, 1 through 5.");
             }
@@ -121,6 +127,7 @@ public class Midterm {
             generateDivision();
         }else if(playerInput.equalsIgnoreCase("5")){
             displayStats();
+
         }
         return playerInput;
     }
@@ -185,10 +192,18 @@ public class Midterm {
     }
 
     private static void displayStats() {
-        System.out.println(playerName);
-        System.out.println("Total Earnings: " + userEarnings);
-        System.out.println("Total Correct: " + correct);
-        System.out.println("Total Incorrect: " + incorrect);
+            System.out.println(playerName);
+            System.out.println("Total Earnings: " + userEarnings);
+            System.out.println("Total Correct: " + correct);
+            System.out.println("Total Incorrect: " + incorrect);
+
+            System.out.println("Press any key to continue...");
+            try{
+                System.in.read();
+            } catch (IOException e){
+                e.printStackTrace();
+            }
+
     }
 
     private static void credits() {
@@ -247,8 +262,8 @@ public class Midterm {
     }
 
     private static void generateDivision() {
-        int a = random.nextInt(20) + 1;
-        int b = random.nextInt(20) + 1;
+        int b = random.nextInt(9) + 1;
+        int a = random.nextInt(9) * b;
         int expected = a / b;
 
         System.out.println(a + " / " + b + " =");
@@ -262,57 +277,30 @@ public class Midterm {
             System.out.println("Correct answer!");
             System.out.println("You have been awarded $0.03");
 
-            userEarnings += 0.03;
-            correct += 1;
+            earningsChange = 0.03;
+            correctChange = 1;
+            incorrectChange = 0;
 
         } else {
             System.out.println("Wrong answer. Try again.");
             System.out.println("You have been penalized $0.05");
 
-            userEarnings -= 0.05;
-            incorrect -= 1;
+            earningsChange = -0.05;
+            correctChange = 0;
+            incorrectChange = 1;
+        }
+
+        System.out.println("Press any key to continue...");
+        try{
+            System.in.read();
+        } catch (IOException e){
+            e.printStackTrace();
         }
     }
 
-    private static void updateStats(){
-
+    private static void updateStats(double earningsChange, int correctChange, int incorrectChange){
+        userEarnings += earningsChange;
+        correct += correctChange;
+        incorrect += incorrectChange;
     }
 }
-
-//public static Problem generateRandomProblem (){
-//    Random randomGen = new Random();
-//
-//    int number1 = randomGen.nextInt(201);
-//    int number2 = randomGen.nextInt(201);
-//
-//    Operation operation = Operation.values()[randomGen.nextInt(Operation.values().length)];
-//    return new Problem(number1, number2, operation);
-//}
-
-//class Problem{
-//
-//    private int number1;
-//    private int number2;
-//    private Operation operation;
-//
-//    public Problem(int number1, int number2, Operation operation) {
-//        this.number1 = number1;
-//        this.number2 = number2;
-//        this.operation = operation;
-//}
-//    public int getNumber1() {
-//        return number1;
-//    }
-//
-//    public int getNumber2() {
-//        return number2;
-//    }
-//
-//    public Operation getOperation() {
-//        return operation;
-//    }
-//}
-//
-//enum Operation {
-//    ADDITION, SUBTRACTION, MULTIPLICATION, DIVISION
-//}
