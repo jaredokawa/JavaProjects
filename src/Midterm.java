@@ -16,7 +16,7 @@
 //  3. Multiplication (the product must be an integer >= 0)
 //  4. Division (the quotient must be an integer >= 0)
 //2. Validate user input at every opportunity. If your program crashes because you allow the user to make an
-//invalid entry and you did not write code to handle such potential exceptions, you will NOT pass the
+//invalid entry, and you did not write code to handle such potential exceptions, you will NOT pass the
 //midterm!
 //3. The program should keep track of the following statistics:
 //  1. The user’s name
@@ -60,40 +60,157 @@
 //4. If you violate any of these restrictions, you will automatically get a score of ZERO!
 
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Random;
 import java.util.Scanner;
 
 public class Midterm {
     private static final Scanner scan = new Scanner(System.in);
     private static final Random random = new Random();
+    private static String playerName;
+    private static double userEarnings = 0.0;
+    private static int correct = 0;
+    private static int incorrect = 0;
 
     public static void main(String[] args) {
 
-        String playerName;
+        credits();
+
         String playerInput = "";
 
-        System.out.println("Please enter your name.");
+        System.out.println("Please enter your name and press <ENTER>");
         playerName = scan.nextLine();
 
-        System.out.println("1. Addition");
-        System.out.println("2. Subtraction");
-        System.out.println("3. Multiplication");
-        System.out.println("4. Division");
+        boolean continueInput = true;
 
+        do {
+            menu();
 
+            playerInput = validateUserResponse(playerInput);
+
+            saveStats();
+
+        } while(continueInput);
+    }
+
+    private static String validateUserResponse(String playerInput) {
         boolean validInput = false;
 
-        while(!validInput){
-            System.out.println("Please select a number.");
+        while (!validInput) {
+
             playerInput = scan.nextLine();
 
-            if(playerInput.matches("[01]+")){
+            if (playerInput.matches("[0-5]")) {
                 validInput = true;
+            }else if (playerInput.equalsIgnoreCase("n")) {
+                System.exit(0);
+            }else {
+                System.out.println("This is not a valid menu option. Please enter a number, 1 through 5.");
             }
         }
 
         if(playerInput.equalsIgnoreCase("1")){
             generateAddition();
+        }else if(playerInput.equalsIgnoreCase("2")){
+            generateSubtraction();
+        }else if(playerInput.equalsIgnoreCase("3")){
+            generateMultiplication();
+        }else if(playerInput.equalsIgnoreCase("4")){
+            generateDivision();
+        }else if(playerInput.equalsIgnoreCase("5")){
+            displayStats();
+        }
+        return playerInput;
+    }
+
+    private static int validateUserAnswer(){
+        boolean validInput = false;
+        int input = 0;
+
+        while (!validInput){
+            try {
+                String userInput = scan.nextLine();
+                input = Integer.parseInt(userInput);
+                validInput = true;
+            } catch (NumberFormatException e){
+                System.out.println("Invalid input. Please enter a number.");
+            }
+        }
+
+        return input;
+    }
+
+    private static void saveStats() {
+        //Creates new file object
+        File file = new File("outDataFile.txt");
+
+        try {
+            //Checks if the file represented by the file object exists
+            if (!file.exists()) {
+                //If the file does not exist, it will be created with the name specified by the file object
+                file.createNewFile();
+            }
+            //Creates a new PrintWriter object named pw
+            PrintWriter pw = new PrintWriter(file);
+            //Writes to the text file created
+            pw.println(playerName);
+            pw.println(userEarnings);
+            pw.println(correct);
+            pw.println(incorrect);
+            pw.close();
+            //Handles exceptions
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static void menu() {
+        System.out.println("******CHOOSE A PROBLEM******");
+        System.out.println("****************************");
+        System.out.println("****************************");
+        System.out.println("******                ******");
+        System.out.println("****** 1. ADD         ******");
+        System.out.println("****** 2. SUBTRACT    ******");
+        System.out.println("****** 3. MULTIPLY    ******");
+        System.out.println("****** 4. DIVIDE      ******");
+        System.out.println("****** 5. STATS       ******");
+        System.out.println("****** n/N to QUIT    ******");
+        System.out.println("******                ******");
+        System.out.println("****************************");
+        System.out.println("****************************");
+        System.out.println(" ");
+        System.out.println("Please select a number and press <ENTER>");
+    }
+
+    private static void displayStats() {
+        System.out.println(playerName);
+        System.out.println("Total Earnings: " + userEarnings);
+        System.out.println("Total Correct: " + correct);
+        System.out.println("Total Incorrect: " + incorrect);
+    }
+
+    private static void credits() {
+        System.out.println("***********************");
+        System.out.println("***********************");
+        System.out.println("***********************");
+        System.out.println("******           ******");
+        System.out.println("******TheMathGame******");
+        System.out.println("******    By     ******");
+        System.out.println("******   Jared   ******");
+        System.out.println("******   Okawa   ******");
+        System.out.println("******           ******");
+        System.out.println("***********************");
+        System.out.println("***********************");
+        System.out.println("***********************");
+        System.out.println(" ");
+        System.out.println("y/Y to continue, any other char to exit.");
+
+        String playerInput = scan.nextLine();
+
+        if(!playerInput.equalsIgnoreCase("y")){
+            System.exit(0);
         }
     }
 
@@ -103,45 +220,62 @@ public class Midterm {
         int expected = a + b;
 
         System.out.println(a + " + " + b + " =");
-        String answer = scan.nextLine();
-
-        checkResult(expected, Integer.parseInt(answer));
+        int answer = validateUserAnswer();
+        checkUserAnswer(expected, answer);
     }
 
-    private void generateSubtraction() {
+    private static void generateSubtraction() {
         int a = random.nextInt(20) + 1;
         int b = random.nextInt(20) + 1;
-        int expected = a + b;
+        int expected = a - b;
 
         System.out.println(a + " - " + b + " =");
-        String answer = scan.nextLine();
+        int answer = validateUserAnswer();
 
-        checkResult(expected, Integer.parseInt(answer));
+        checkUserAnswer(expected, answer);
     }
 
-    private void generateMultiplication() {
+    private static void generateMultiplication() {
         int a = random.nextInt(20) + 1;
         int b = random.nextInt(20) + 1;
-        int expected = a + b;
+        int expected = a * b;
 
-        System.out.println(a + " - " + b + " =");
-        String answer = scan.nextLine();
+        System.out.println(a + " * " + b + " =");
+        int answer = validateUserAnswer();
 
-        checkResult(expected, Integer.parseInt(answer));
+        checkUserAnswer(expected, answer);
     }
 
-    private int askQuestion(final String question) {
-        System.out.print(question);
+    private static void generateDivision() {
+        int a = random.nextInt(20) + 1;
+        int b = random.nextInt(20) + 1;
+        int expected = a / b;
 
-        return scan.nextInt();
+        System.out.println(a + " / " + b + " =");
+        int answer = validateUserAnswer();
+
+        checkUserAnswer(expected, answer);
     }
 
-    private static void checkResult(final int expected, final int answer) {
+    private static void checkUserAnswer(int expected, int answer) {
         if (expected == answer) {
             System.out.println("Correct answer!");
+            System.out.println("You have been awarded $0.03");
+
+            userEarnings += 0.03;
+            correct += 1;
+
         } else {
             System.out.println("Wrong answer. Try again.");
+            System.out.println("You have been penalized $0.05");
+
+            userEarnings -= 0.05;
+            incorrect -= 1;
         }
+    }
+
+    private static void updateStats(){
+
     }
 }
 
