@@ -89,7 +89,7 @@ public class Midterm {
         do {
             menu();
 
-            playerInput = validateUserResponse(playerInput);
+            validateUserResponse();
 
             updateStats(earningsChange, correctChange, incorrectChange);
 
@@ -102,7 +102,7 @@ public class Midterm {
         } while(continueInput);
     }
 
-    private static String validateUserResponse(String playerInput) {
+    private static void validateUserResponse() {
         boolean validInput = false;
 
         while (!validInput) {
@@ -150,7 +150,7 @@ public class Midterm {
 
     private static void saveStats() {
         //Creates new file object
-        File file = new File("outDataFile.txt");
+        File file = new File(playerName.concat(".txt"));
 
         try {
             //Checks if the file represented by the file object exists
