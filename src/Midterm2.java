@@ -40,9 +40,14 @@ public class Midterm2 {
             try (Scanner fileScanner = new Scanner(file)) {
                 playerName = fileScanner.nextLine();
                 String earningsLine = fileScanner.nextLine();
-                userEarnings = Double.parseDouble(earningsLine.split("\\$")[1]);
-                correct = Integer.parseInt(fileScanner.nextLine());
-                incorrect = Integer.parseInt(fileScanner.nextLine());
+                if (earningsLine.contains("$")) {
+                    userEarnings = Double.parseDouble(earningsLine.split("\\$")[1]);
+                } else {
+                    throw new IOException("Invalid earnings format");
+                }
+
+                correct = Integer.parseInt(fileScanner.nextLine().split(": ")[1]);
+                incorrect = Integer.parseInt(fileScanner.nextLine().split(": ")[1]);
             } catch (IOException | NumberFormatException e) {
                 throw new RuntimeException("Error loading stats", e);
             }
@@ -55,9 +60,9 @@ public class Midterm2 {
 
         try (PrintWriter pw = new PrintWriter(file)) {
             pw.println(playerName);
-            pw.printf("%.2f%n", userEarnings);
-            pw.println(correct);
-            pw.println(incorrect);
+            pw.printf("Total Earnings: $%.2f%n", userEarnings);
+            pw.println("Total Correct: " + correct);
+            pw.println("Total Incorrect: " + incorrect);
         } catch (IOException e) {
             throw new RuntimeException("Error saving stats", e);
         }
@@ -89,7 +94,7 @@ public class Midterm2 {
         boolean validInput = false;
 
         System.out.println(playerName);
-        System.out.println("Total Earnings: $" + userEarnings );
+        System.out.printf("Total Earnings: $%.2f%n", userEarnings );
         System.out.println("Total Correct: " + correct);
         System.out.println("Total Incorrect: " + incorrect);
 
@@ -122,7 +127,7 @@ public class Midterm2 {
         String answer;
 
         int a = random.nextInt(20) + 1;
-        int b = random.nextInt(20) + 1;
+        int b = random.nextInt(a + 1);
         int expected = a - b;
 
         System.out.println(a + " - " + b + " =");
