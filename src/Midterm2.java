@@ -1,4 +1,6 @@
+import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -11,13 +13,54 @@ public class Midterm2 {
     private static int incorrect = 0;
     private static final double CORRECT_CHANGE = 0.03;
     private static final double INCORRECT_CHANGE = 0.05;
+    private static double userEarnings = 0;
 
     public static void main(String[] args) {
         String playerInput;
+        boolean continueInput = true;
         credits();
-        menu();
-        playerInput = getUserInput();
-        generateMathChallenge(playerInput);
+
+        System.out.println("Please enter your name and press <ENTER>");
+        playerName = scan.nextLine();
+
+        loadStats();
+
+        do {
+            menu();
+            playerInput = getUserInput();
+            generateMathChallenge(playerInput);
+            saveStats();
+        } while (continueInput);
+    }
+
+    private static void loadStats() {
+        File file = new File(playerName.concat(".txt"));
+
+        if (file.exists()) {
+            try (Scanner fileScanner = new Scanner(file)) {
+                playerName = fileScanner.nextLine();
+                String earningsLine = fileScanner.nextLine();
+                userEarnings = Double.parseDouble(earningsLine.split("\\$")[1]);
+                correct = Integer.parseInt(fileScanner.nextLine());
+                incorrect = Integer.parseInt(fileScanner.nextLine());
+            } catch (IOException | NumberFormatException e) {
+                throw new RuntimeException("Error loading stats", e);
+            }
+        }
+    }
+
+    private static void saveStats() {
+        //Creates new file object
+        File file = new File(playerName.concat(".txt"));
+
+        try (PrintWriter pw = new PrintWriter(file)) {
+            pw.println(playerName);
+            pw.printf("%.2f%n", userEarnings);
+            pw.println(correct);
+            pw.println(incorrect);
+        } catch (IOException e) {
+            throw new RuntimeException("Error saving stats", e);
+        }
     }
 
     private static void generateMathChallenge(String playerInput) {
@@ -43,86 +86,103 @@ public class Midterm2 {
     }
 
     private static void displayStats() {
-        System.out.println(playerName);
-       double a = (correct * CORRECT_CHANGE) + (incorrect * INCORRECT_CHANGE);
+        boolean validInput = false;
 
-        System.out.println("Total Earnings: " + a );
+        System.out.println(playerName);
+        System.out.println("Total Earnings: $" + userEarnings );
         System.out.println("Total Correct: " + correct);
         System.out.println("Total Incorrect: " + incorrect);
 
-        System.out.println("Press any key to continue...");
+        while (!validInput) {
+            System.out.println("Press <ENTER> to continue...");
+            String entry = scan.nextLine();
 
-        //TODO get rid of this
-        try {
-            System.in.read();
-        } catch (IOException e) {
-            e.printStackTrace();
+            if (entry.isEmpty()) {
+                validInput = true;  // Input is valid, so we exit the loop
+                break;
+            } else {
+                System.out.println("Press <ENTER> to continue...");  // Prompt again if input is not empty
+            }
         }
     }
 
     private static void generateAddition() {
+        String answer;
+
         int a = random.nextInt(20) + 1;
         int b = random.nextInt(20) + 1;
-        int answer;
         int expected = a + b;
 
         System.out.println(a + " + " + b + " =");
         answer = validateUserAnswer();
-        checkUserAnswer(expected, answer);
+        checkUserAnswer(expected, Integer.parseInt(answer));
     }
 
     private static void generateSubtraction() {
+        String answer;
+
         int a = random.nextInt(20) + 1;
         int b = random.nextInt(20) + 1;
         int expected = a - b;
 
         System.out.println(a + " - " + b + " =");
-        int answer = validateUserAnswer();
+        answer = validateUserAnswer();
 
-        checkUserAnswer(expected, answer);
+        checkUserAnswer(expected, Integer.parseInt(answer));
     }
 
     private static void generateMultiplication() {
+        String answer;
+
         int a = random.nextInt(20) + 1;
         int b = random.nextInt(20) + 1;
         int expected = a * b;
 
         System.out.println(a + " * " + b + " =");
-        int answer = validateUserAnswer();
+        answer = validateUserAnswer();
 
-        checkUserAnswer(expected, answer);
+        checkUserAnswer(expected, Integer.parseInt(answer));
     }
 
     private static void generateDivision() {
+        String answer;
+
         int b = random.nextInt(9) + 1;
         int a = random.nextInt(9) * b;
         int expected = a / b;
 
         System.out.println(a + " / " + b + " =");
-        int answer = validateUserAnswer();
+        answer = validateUserAnswer();
 
-        checkUserAnswer(expected, answer);
+        checkUserAnswer(expected, Integer.parseInt(answer));
     }
 
     private static void checkUserAnswer(int expected, int answer) {
+        boolean validInput = false;
+
         if (expected == answer) {
             System.out.println("Correct answer!");
             System.out.println("You have been awarded $0.03");
             correct++;
+            userEarnings += CORRECT_CHANGE;
 
         } else {
             System.out.println("Wrong answer. Try again.");
             System.out.println("You have been penalized $0.05");
             incorrect++;
+            userEarnings -= INCORRECT_CHANGE;
         }
 
-        System.out.println("Press any key to continue...");
+        while (!validInput) {
+            System.out.println("Press <ENTER> to continue...");
+            String entry = scan.nextLine();
 
-        //TODO GET RID OF
-        try {
-            System.in.read();
-        } catch (IOException e) {
-            e.printStackTrace();
+            if (entry.isEmpty()) {
+                validInput = true;  // Input is valid, so we exit the loop
+                break;
+            } else {
+                System.out.println("Press <ENTER> to continue...");  // Prompt again if input is not empty
+            }
         }
     }
 
@@ -166,9 +226,6 @@ public class Midterm2 {
         if (!playerInput.equalsIgnoreCase("y")) {
             System.exit(0);
         }
-
-        System.out.println("Please enter your name and press <ENTER>");
-        playerName = scan.nextLine();
     }
 
     private static void menu() {
@@ -189,20 +246,22 @@ public class Midterm2 {
         System.out.println("Please select a number and press <ENTER>");
     }
 
-    private static int validateUserAnswer() {
+    private static String validateUserAnswer() {
         boolean validInput = false;
-        int input = 0;
 
-        while (!validInput) {
-            //TODO get rid of this try catch and validate correctly
-            try {
-                String userInput = scan.nextLine();
-                input = Integer.parseInt(userInput);
-                validInput = true;
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a number.");
+        String playerInput = "";
+
+            while (!validInput) {
+
+                playerInput = scan.nextLine();
+
+                if (playerInput.matches("[0-9]+")) {
+                    validInput = true;
+                } else {
+                    System.out.println("Invalid input. Please enter a number.");
+                }
             }
+            return playerInput;
         }
-        return input;
+
     }
-}

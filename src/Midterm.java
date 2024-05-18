@@ -102,7 +102,7 @@ public class Midterm {
         } while(continueInput);
     }
 
-    private static void validateUserResponse() {
+    private static String validateUserResponse() {
         boolean validInput = false;
 
         while (!validInput) {
